@@ -14,12 +14,12 @@ class _HomepageState extends State<Homepage> {
   List<String> op = [
     "+",
     "-",
-    "X",
-    "/",
+    "x",
+    "<",
     "1",
     "2",
     "3",
-    "%",
+    "/",
     "4",
     "5",
     "6",
@@ -36,12 +36,17 @@ class _HomepageState extends State<Homepage> {
       setState(() {
         t = "";
       });
-    }
-   else if (op[i] == "=") {
+    } else if (op[i] == "<") {
+      if (t.length > 0) {
+        setState(() {
+          t = t.substring(0, t.length - 1);
+        });
+      }
+    } else if (op[i] == "=") {
       for (int j = 0; j < t.length; j++) {
         if (t.substring(j, j + 1) == "+" ||
             t.substring(j, j + 1) == "-" ||
-            t.substring(j, j + 1) == "X" ||
+            t.substring(j, j + 1) == "x" ||
             t.substring(j, j + 1) == "/" ||
             t.substring(j, j + 1) == "%" ||
             t.substring(j, j + 1) == "^") {
@@ -67,7 +72,7 @@ class _HomepageState extends State<Homepage> {
             t = d;
           });
           break;
-        case "X":
+        case "x":
           var c = a * b;
           var d = c.toString();
           setState(() {
@@ -116,7 +121,7 @@ class _HomepageState extends State<Homepage> {
         ),
         backgroundColor: Colors.pink,
       ),
-      backgroundColor: Colors.deepPurple,
+      backgroundColor: Colors.grey[300],
       body: Column(children: [
         Expanded(
           flex: 2,
@@ -124,7 +129,10 @@ class _HomepageState extends State<Homepage> {
             alignment: Alignment.bottomRight,
             child: Text(
               t,
-              style: TextStyle(color: Colors.white, fontSize: 40.0),
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 40.0,
+                  fontWeight: FontWeight.bold),
               textDirection: TextDirection.ltr,
             ),
             height: 100,
@@ -139,20 +147,40 @@ class _HomepageState extends State<Homepage> {
                     crossAxisCount: 4),
                 itemBuilder: (context, index) {
                   return Padding(
-                    padding: const EdgeInsets.all(3.0),
-                    child: (MaterialButton(
-                      onPressed: () {
-                        calc(index);
-                      },
-                      child: Center(
-                          child: Text(
-                        op[index],
-                        style: TextStyle(color: Colors.white, fontSize: 20.0),
+                    padding: const EdgeInsets.all(5.0),
+                    child: GestureDetector(
+                      onTap: () => calc(index),
+                      child: (Container(
+                        child: Center(
+                            child: Text(
+                          op[index],
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold),
+                        )),
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.shade500,
+                              offset: Offset(4.0, 4.0),
+                              blurRadius: 15.0,
+                              spreadRadius: 1.0,
+                            ),
+                            BoxShadow(
+                              color: Colors.white,
+                              offset: Offset(-4.0, -4.0),
+                              blurRadius: 15.0,
+                              spreadRadius: 1.0,
+                            ),
+                          ],
+                        ),
                       )),
-                      color: Colors.pink,
-                      height: 50,
-                      minWidth: 50,
-                    )),
+                    ),
                   );
                 }),
           ),

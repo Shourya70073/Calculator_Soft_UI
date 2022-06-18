@@ -1,3 +1,5 @@
+// ignore_for_file: sort_child_properties_last, avoid_unnecessary_containers, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:flutter/src/foundation/key.dart';
@@ -11,6 +13,8 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  var p;
+  var q;
   List<String> op = [
     "+",
     "-",
@@ -30,6 +34,14 @@ class _HomepageState extends State<Homepage> {
     "="
   ];
   String t = "";
+  void checkcolor(int d) {
+    if (d == 0 ||d == 1 ||d == 2 ||d == 3 || d == 7 || d == 11 || d == 15) {
+      q = true;
+    } else {
+      q = false;
+    }
+  }
+
   void calc(int i) {
     int jp = 0;
     if (op[i] == "CC") {
@@ -114,78 +126,81 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return (Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Calculator",
-          textDirection: TextDirection.ltr,
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Colors.pink,
+        title: Text("CALCULATOR"),
+        backgroundColor: Colors.black,
       ),
       backgroundColor: Colors.grey[300],
-      body: Column(children: [
-        Expanded(
-          flex: 2,
-          child: Container(
-            alignment: Alignment.bottomRight,
-            child: Text(
-              t,
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 40.0,
-                  fontWeight: FontWeight.bold),
-              textDirection: TextDirection.ltr,
+      body: Column(
+        children: [
+          SizedBox(
+            height: 70,
+          ),
+          Expanded(
+            flex: 2,
+            child: Container(
+              
+              alignment: Alignment.bottomRight,
+              child: Text(
+                t,
+                // ignore: prefer_const_constructors
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 40.0,
+                    fontWeight: FontWeight.bold),
+                textDirection: TextDirection.ltr,
+              ),
             ),
-            height: 100,
           ),
-        ),
-        Expanded(
-          flex: 5,
-          child: Container(
-            child: GridView.builder(
-                itemCount: op.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4),
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: GestureDetector(
-                      onTap: () => calc(index),
-                      child: (Container(
-                        child: Center(
-                            child: Text(
-                          op[index],
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold),
+          Expanded(
+            flex: 5,
+            child: Container(
+              child: GridView.builder(
+                  itemCount: op.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4),
+                  itemBuilder: (context, index) {
+                    checkcolor(index);
+                    return Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: GestureDetector(
+                        onTap: () => calc(index),
+                        child: (Container(
+                          child: Center(
+                              child: Text(
+                            op[index],
+                            style: TextStyle(
+                                color: q?Colors.white:Colors.black,
+                                fontSize: 30.0,
+                                fontWeight: FontWeight.bold),
+                          )
+                          ),
+                          decoration: BoxDecoration(
+                              color: q?Colors.black:Colors.grey[300],
+                              borderRadius: BorderRadius.circular(50),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.shade500,
+                                  offset: Offset(4.0, 4.0),
+                                  blurRadius: 15.0,
+                                  spreadRadius: 1.0,
+                                ),
+                                BoxShadow(
+                                  color: Colors.white,
+                                  offset: Offset(-4.0, -4.0),
+                                  blurRadius: 15.0,
+                                  spreadRadius: 1.0,
+                                ),
+                              ],
+                             
+                              ),
                         )),
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.shade500,
-                              offset: Offset(4.0, 4.0),
-                              blurRadius: 15.0,
-                              spreadRadius: 1.0,
-                            ),
-                            BoxShadow(
-                              color: Colors.white,
-                              offset: Offset(-4.0, -4.0),
-                              blurRadius: 15.0,
-                              spreadRadius: 1.0,
-                            ),
-                          ],
-                        ),
-                      )),
-                    ),
-                  );
-                }),
-          ),
-        )
-      ]),
+                      ),
+                    );
+                  }),
+            ),
+          )
+        ],
+      ),
     ));
   }
 }
